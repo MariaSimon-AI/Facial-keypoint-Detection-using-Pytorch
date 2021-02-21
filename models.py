@@ -21,10 +21,7 @@ class Net(nn.Module):
         # 1 input image channel (grayscale), 32 output channels/feature maps, 4x4           square convolution kernel
         ## output size = (W-F)/S +1 = (224-5)/1 +1 = 220
         self.conv1 = nn.Conv2d(1, 32, 5)
-        # the output Tensor for one image, will have the dimensions: (32,222,222)
-        
-        # pool with kernel_size=2, stride=2
-        self.pool1 = nn.MaxPool2d(2, 2)
+        # the output Tensor for one image, will have the dimensions: (32,220,220)
         # after one pool layer, this becomes (32, 110, 110)
         
         #applying batchnorm
@@ -34,9 +31,6 @@ class Net(nn.Module):
         ## output size = (W-F)/S +1 = (110-3)/1 +1 = 108
         self.conv2 = nn.Conv2d(32, 64, 3)
         # the output tensor will have dimensions: (64, 108, 108)
-        
-        # pool with kernel_size=2, stride=2
-        self.pool2 = nn.MaxPool2d(2, 2)
         # after one pool layer, this becomes (64, 54, 54)
         
         #applying batchnorm
@@ -46,9 +40,6 @@ class Net(nn.Module):
         ## output size = (W-F)/S +1 = (54-3)/1 +1 = 52
         self.conv3 = nn.Conv2d(64, 128, 3)
         # the output tensor will have dimensions: (128, 52, 52)
-        
-        # pool with kernel_size=2, stride=2
-        self.pool3 = nn.MaxPool2d(2, 2)
         # after one pool layer, this becomes (128, 26, 26)
         
         #applying batchnorm
@@ -58,9 +49,6 @@ class Net(nn.Module):
         ## output size = (W-F)/S +1 = (26-3)/1 +1 = 24
         self.conv4 = nn.Conv2d(128, 256, 3)
         # the output tensor will have dimensions: (256, 24, 24)
-        
-        # pool with kernel_size=2, stride=2
-        self.pool4 = nn.MaxPool2d(2, 2)
         # after one pool layer, this becomes (256, 12, 12)
         
         #applying batchnorm
@@ -70,10 +58,10 @@ class Net(nn.Module):
         ## output size = (W-F)/S +1 = (12-3)/1 +1 = 10
         self.conv5 = nn.Conv2d(256, 512, 3)
         # the output tensor will have dimensions: (512, 10, 10)
+        # after one pool layer, this becomes (512, 5, 5)
         
         # pool with kernel_size=2, stride=2
-        self.pool5 = nn.MaxPool2d(2, 2)
-        # after one pool layer, this becomes (512, 5, 5)
+        self.pool = nn.MaxPool2d(2, 2)
         
         
         # 1024 outputs * 5*5 filtered/pooled map size
@@ -99,7 +87,7 @@ class Net(nn.Module):
         
         
         # applies pooling layer
-        x = self.pool1(x)
+        x = self.pool(x)
         
         #applies batchnorm layer
         x = self.bn1_1(x)
@@ -109,7 +97,7 @@ class Net(nn.Module):
         
         
         # applies pooling layer
-        x = self.pool2(x)
+        x = self.pool(x)
         
         #applies batchnorm layer
         x = self.bn1_2(x)
@@ -119,7 +107,7 @@ class Net(nn.Module):
         
         
         # applies pooling layer
-        x = self.pool3(x)
+        x = self.pool(x)
         
         #applies batchnorm layer
         x = self.bn1_3(x)
@@ -129,7 +117,7 @@ class Net(nn.Module):
         
         
         # applies pooling layer
-        x = self.pool4(x)
+        x = self.pool(x)
         
         #applies batchnorm layer
         x = self.bn1_4(x)
@@ -138,7 +126,7 @@ class Net(nn.Module):
         x = F.relu(self.conv5(x))
         
         # applies pooling layer
-        x = self.pool5(x)
+        x = self.pool(x)
         
         # prep for linear layer
         # this line of code is the equivalent of Flatten in Keras
