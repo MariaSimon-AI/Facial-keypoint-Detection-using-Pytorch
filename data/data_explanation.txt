@@ -1,0 +1,3 @@
+data has to be downloaded to this folder from
+
+https://github.com/udacity/P1_Facial_Keypoints/tree/master/data
